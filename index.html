@@ -51,471 +51,6 @@
             display: block;
             margin: 0 auto 16px;
             font-size: 3rem;
-            color: #ffd700;
-            text-align: center;
-            line-height: 1;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #4b5563;
-        }
-
-        select, input[type="number"] {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 1rem;
-            background: #f8fafc;
-            color: #1f2937;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        select:focus, input[type="number"]:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-        }
-
-        .side-switch-container {
-            display: flex;
-            background: #e5e7eb;
-            border-radius: 8px;
-            padding: 4px;
-            margin-bottom: 20px;
-        }
-
-        .switch-option {
-            flex: 1;
-            text-align: center;
-            padding: 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #6b7280;
-            transition: all 0.3s ease;
-        }
-
-        .switch-option.buy.active {
-            background: #22c55e;
-            color: white;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-        }
-
-        .switch-option.sell.active {
-            background: #ef4444;
-            color: white;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
-
-        .rr-input-container, .custom-input-container {
-            margin-bottom: 20px;
-        }
-
-        .calculate-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
-        }
-
-        .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-        }
-
-        .results {
-            margin-top: 24px;
-            padding: 24px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            display: none;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .result-item:last-child {
-            border-bottom: none;
-        }
-
-        .result-label {
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .result-value {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .result-value.tp-value {
-            color: #22c55e;
-        }
-
-        .result-value.sl-value {
-            color: #ef4444;
-        }
-
-        .result-value.entry-value {
-            color: #3b82f6;
-        }
-
-        .side-indicator {
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-weight: 600;
-        }
-
-        .buy-side {
-            background: #dcfce7;
-            color: #16a34a;
-        }
-
-        .sell-side {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        @media (max-width: 480px) {
-            .calculator {
-                padding: 24px;
-            }
-
-            h1 {
-                font-size: 1.6rem;
-            }
-
-            .logo {
-                font-size: 2.5rem;
-            }
-
-            select, input[type="number"], .calculate-btn {
-                font-size: 1rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="calculator">
-        <span class="logo">💰</span>
-        <h1>Forex & Gold TP/SL Calculator</h1>
-
-        <div class="form-group">
-            <label for="mode">คู่เงิน/สินทรัพย์:</label>
-            <select id="mode" onchange="updateDefaultValues()">
-                <option value="xauusd">XAU/USD (Gold)</option>
-                <option value="forex">Forex (เช่น EUR/USD)</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="entryPrice">ราคาเปิดออเดอร์ (Entry Price):</label>
-            <input type="number" id="entryPrice" step="0.00001" placeholder="เช่น 2000.50 (Gold) หรือ 1.09250 (Forex)">
-        </div>
-
-        <div class="form-group">
-            <label for="calcMode">โหมดการคำนวณ:</label>
-            <select id="calcMode" onchange="toggleInputFields()">
-                <option value="rr">Risk/Reward Ratio</option>
-                <option value="custom">กำหนด TP/SL เอง</option>
-            </select>
-        </div>
-
-        <div class="rr-input-container form-group" id="rrInputContainer">
-            <label for="points">ระยะ Points/Pips (Stop Loss):</label>
-            <input type="number" id="points" step="1" placeholder="เช่น 50">
-            <label for="rrRatio">อัตราส่วน Risk/Reward (เช่น 2 สำหรับ 1:2):</label>
-            <input type="number" id="rrRatio" step="0.1" min="0.1" placeholder="เช่น 2" value="1">
-        </div>
-
-        <div class="custom-input-container form-group" id="customInputContainer" style="display: none;">
-            <label for="tpPrice">Take Profit (TP):</label>
-            <input type="number" id="tpPrice" step="0.00001" placeholder="เช่น 2010.50 (Gold) หรือ 1.10250 (Forex)">
-            <label for="slPrice">Stop Loss (SL):</label>
-            <input type="number" id="slPrice" step="0.00001" placeholder="เช่น 1990.50 (Gold) หรือ 1.08250 (Forex)">
-        </div>
-
-        <div class="form-group">
-            <label>ฝั่ง (Position):</label>
-            <div class="side-switch-container">
-                <div class="switch-option buy active" onclick="selectSide('buy')">BUY</div>
-                <div class="switch-option sell" onclick="selectSide('sell')">SELL</div>
-            </div>
-        </div>
-
-        <button class="calculate-btn" onclick="calculate()">คำนวณ</button>
-
-        <div class="results" id="results">
-            <div class="result-item">
-                <span class="result-label">คู่เงิน/สินทรัพย์:</span>
-                <span class="result-value" id="pairDisplay">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">ฝั่ง:</span>
-                <span class="side-indicator" id="sideDisplay">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">ราคาเปิด:</span>
-                <span class="result-value entry-value" id="entryDisplay">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Risk/Reward:</span>
-                <span class="result-value" id="rrDisplay">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Take Profit (TP):</span>
-                <span class="result-value tp-value" id="tpDisplay">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Stop Loss (SL):</span>
-                <span class="result-value sl-value" id="slDisplay">-</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let currentSide = 'buy';
-        let currentRatio = 1;
-
-        function selectSide(side) {
-            currentSide = side;
-            document.querySelectorAll('.switch-option').forEach(option => {
-                option.classList.remove('active');
-            });
-            document.querySelector(`.switch-option.${side}`).classList.add('active');
-        }
-
-        function updateDefaultValues() {
-            const mode = document.getElementById('mode').value;
-            const entryPriceInput = document.getElementById('entryPrice');
-            const pointsInput = document.getElementById('points');
-            const tpPriceInput = document.getElementById('tpPrice');
-            const slPriceInput = document.getElementById('slPrice');
-
-            if (mode === 'xauusd') {
-                entryPriceInput.value = '2000.50';
-                pointsInput.value = '50';
-                tpPriceInput.value = '2010.50';
-                slPriceInput.value = '1990.50';
-            } else {
-                entryPriceInput.value = '1.09250';
-                pointsInput.value = '50';
-                tpPriceInput.value = '1.10250';
-                slPriceInput.value = '1.08250';
-            }
-        }
-
-        function toggleInputFields() {
-            const calcMode = document.getElementById('calcMode').value;
-            const rrInputContainer = document.getElementById('rrInputContainer');
-            const customInputContainer = document.getElementById('customInputContainer');
-
-            if (calcMode === 'rr') {
-                rrInputContainer.style.display = 'block';
-                customInputContainer.style.display = 'none';
-            } else {
-                rrInputContainer.style.display = 'none';
-                customInputContainer.style.display = 'block';
-            }
-        }
-
-        function getPipValue(mode) {
-            return mode === 'xauusd' ? 0.01 : 0.0001;
-        }
-
-        function getPairDisplay(mode) {
-            return mode === 'xauusd' ? 'XAU/USD' : 'Forex';
-        }
-
-        function getDecimalPlaces(entryPrice, mode) {
-            if (mode === 'xauusd') {
-                return 2;
-            }
-            const str = entryPrice.toString();
-            if (str.includes('.')) {
-                return Math.min(str.split('.')[1].length, 5);
-            }
-            return 0;
-        }
-
-        function calculate() {
-            const mode = document.getElementById('mode').value;
-            const calcMode = document.getElementById('calcMode').value;
-            const entryPrice = parseFloat(document.getElementById('entryPrice').value);
-            const decimalPlaces = getDecimalPlaces(entryPrice, mode);
-            const formatDecimals = Math.max(2, decimalPlaces);
-
-            let tp, sl, rr;
-
-            if (calcMode === 'rr') {
-                const points = parseInt(document.getElementById('points').value);
-                currentRatio = parseFloat(document.getElementById('rrRatio').value);
-
-                if (isNaN(entryPrice) || isNaN(points) || isNaN(currentRatio) || entryPrice <= 0 || points <= 0 || currentRatio <= 0) {
-                    alert('กรุณาใส่ราคาเปิด, ระยะ Points/Pips และอัตราส่วน RR ที่ถูกต้อง');
-                    document.getElementById('results').style.display = 'none';
-                    return;
-                }
-
-                const pipValue = getPipValue(mode);
-                const pointsValue = points * pipValue;
-                const tpPoints = pointsValue * currentRatio;
-                const slPoints = pointsValue;
-
-                if (currentSide === 'buy') {
-                    tp = entryPrice + tpPoints;
-                    sl = entryPrice - slPoints;
-                } else {
-                    tp = entryPrice - tpPoints;
-                    sl = entryPrice + slPoints;
-                }
-                rr = currentRatio.toFixed(1);
-            } else {
-                // Custom TP/SL Mode
-                tp = parseFloat(document.getElementById('tpPrice').value);
-                sl = parseFloat(document.getElementById('slPrice').value);
-
-                if (isNaN(entryPrice) || isNaN(tp) || isNaN(sl) || entryPrice <= 0 || tp <= 0 || sl <= 0) {
-                    alert('กรุณาใส่ราคาเปิด, TP และ SL ที่ถูกต้อง');
-                    document.getElementById('results').style.display = 'none';
-                    return;
-                }
-
-                // Validate TP/SL based on side
-                if (currentSide === 'buy' && (tp <= entryPrice || sl >= entryPrice)) {
-                    alert('สำหรับ BUY: TP ต้องมากกว่าราคาเปิด และ SL ต้องน้อยกว่าราคาเปิด');
-                    document.getElementById('results').style.display = 'none';
-                    return;
-                }
-                if (currentSide === 'sell' && (tp >= entryPrice || sl <= entryPrice)) {
-                    alert('สำหรับ SELL: TP ต้องน้อยกว่าราคาเปิด และ SL ต้องมากกว่าราคาเปิด');
-                    document.getElementById('results').style.display = 'none';
-                    return;
-                }
-
-                // Calculate RR
-                const risk = Math.abs(entryPrice - sl);
-                const reward = Math.abs(tp - entryPrice);
-                rr = (reward / risk).toFixed(1);
-            }
-
-            document.getElementById('pairDisplay').textContent = getPairDisplay(mode);
-            document.getElementById('sideDisplay').textContent = currentSide.toUpperCase();
-            document.getElementById('sideDisplay').className = `side-indicator ${currentSide}-side`;
-            document.getElementById('entryDisplay').textContent = entryPrice.toFixed(formatDecimals);
-            document.getElementById('rrDisplay').textContent = `1:${rr}`;
-            document.getElementById('tpDisplay').textContent = tp.toFixed(formatDecimals);
-            document.getElementById('slDisplay').textContent = sl.toFixed(formatDecimals);
-
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.style.opacity = '0';
-            resultsDiv.style.transform = 'translateY(20px)';
-            resultsDiv.style.display = 'block';
-
-            setTimeout(() => {
-                resultsDiv.style.transition = 'all 0.5s ease';
-                resultsDiv.style.opacity = '1';
-                resultsDiv.style.transform = 'translateY(0)';
-            }, 100);
-        }
-
-        document.getElementById('mode').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('entryPrice').focus();
-            }
-        });
-
-        document.getElementById('entryPrice').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('calcMode').focus();
-            }
-        });
-
-        document.getElementById('calcMode').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const calcMode = document.getElementById('calcMode').value;
-                if (calcMode === 'rr') {
-                    document.getElementById('points').focus();
-                } else {
-                    document.getElementById('tpPrice').focus();
-                }
-            }
-        });
-
-        document.getElementById('points').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('rrRatio').focus();
-            }
-        });
-
-        document.getElementById('rrRatio').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                calculate();
-            }
-        });
-
-        document.getElementById('tpPrice').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('slPrice').focus();
-            }
-        });
-
-        document.getElementById('slPrice').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                calculate();
-            }
-        });
-
-        // Set default values
-        document.getElementById('mode').value = 'xauusd';
-        document.getElementById('calcMode').value = 'rr';
-        document.getElementById('entryPrice').value = '2000.50';
-        document.getElementById('points').value = '50';
-        document.getElementById('rrRatio').value = '1';
-        document.getElementById('tpPrice').value = '2010.50';
-        document.getElementById('slPrice').value = '1990.50';
-        selectSide('buy');
-        toggleInputFields();
-    </script>
-</body>
-</html>        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            text-align: center;
-            color: #1e40af;
-            margin-bottom: 24px;
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .logo {
-            display: block;
-            margin: 0 auto 16px;
-            font-size: 3rem;
             color: #ffd700; /* Gold color */
             text-align: center;
             line-height: 1;
@@ -580,9 +115,19 @@
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
-        .rr-input-container {
-            margin-bottom: 20px;
+        /* Group for RR Ratio or Custom Points */
+        .calculation-mode-group > div {
+            transition: opacity 0.3s ease, max-height 0.5s ease;
+            overflow: hidden;
+            opacity: 1;
+            max-height: 150px; /* Max height to allow transition */
         }
+        .calculation-mode-group > div.hidden {
+            opacity: 0;
+            max-height: 0;
+            margin-bottom: 0 !important;
+        }
+
 
         .calculate-btn {
             width: 100%;
@@ -700,20 +245,42 @@
         </div>
 
         <div class="form-group">
-            <label for="points">ระยะ Points/Pips (Stop Loss):</label>
-            <input type="number" id="points" step="1" placeholder="เช่น 50">
-        </div>
-
-        <div class="rr-input-container form-group">
-            <label for="rrRatio">อัตราส่วน Risk/Reward (เช่น 2 สำหรับ 1:2):</label>
-            <input type="number" id="rrRatio" step="0.1" min="0.1" placeholder="เช่น 2" value="1">
-        </div>
-
-        <div class="form-group">
             <label>ฝั่ง (Position):</label>
             <div class="side-switch-container">
                 <div class="switch-option buy active" onclick="selectSide('buy')">BUY</div>
                 <div class="switch-option sell" onclick="selectSide('sell')">SELL</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="calculationMode">โหมดการคำนวณ:</label>
+            <select id="calculationMode" onchange="toggleCalculationInputs()">
+                <option value="rr_ratio">ใช้ Risk/Reward Ratio (RR)</option>
+                <option value="custom_points">กำหนด TP/SL Points เอง</option>
+            </select>
+        </div>
+
+        <div class="calculation-mode-group">
+            <div id="rrRatioInputs" class="form-group">
+                <div class="form-group">
+                    <label for="points">ระยะ SL Points/Pips:</label>
+                    <input type="number" id="points" step="1" placeholder="เช่น 50">
+                </div>
+                <div class="form-group">
+                    <label for="rrRatio">อัตราส่วน Risk/Reward (เช่น 2 สำหรับ 1:2):</label>
+                    <input type="number" id="rrRatio" step="0.1" min="0.1" placeholder="เช่น 2" value="1">
+                </div>
+            </div>
+
+            <div id="customPointsInputs" class="form-group hidden">
+                <div class="form-group">
+                    <label for="slPoints">ระยะ SL Points/Pips:</label>
+                    <input type="number" id="slPoints" step="1" placeholder="เช่น 50">
+                </div>
+                <div class="form-group">
+                    <label for="tpPoints">ระยะ TP Points/Pips:</label>
+                    <input type="number" id="tpPoints" step="1" placeholder="เช่น 100">
+                </div>
             </div>
         </div>
 
@@ -732,7 +299,7 @@
                 <span class="result-label">ราคาเปิด:</span>
                 <span class="result-value entry-value" id="entryDisplay">-</span>
             </div>
-            <div class="result-item">
+            <div class="result-item" id="rrRatioResultRow">
                 <span class="result-label">Risk/Reward:</span>
                 <span class="result-value" id="rrDisplay">-</span>
             </div>
@@ -749,7 +316,6 @@
 
     <script>
         let currentSide = 'buy';
-        let currentRatio = 1;
 
         function selectSide(side) {
             currentSide = side;
@@ -759,22 +325,45 @@
             document.querySelector(`.switch-option.${side}`).classList.add('active');
         }
 
-        function updateDefaultValues() {
-            const mode = document.getElementById('mode').value;
-            const entryPriceInput = document.getElementById('entryPrice');
-            const pointsInput = document.getElementById('points');
+        function toggleCalculationInputs() {
+            const mode = document.getElementById('calculationMode').value;
+            const rrInputs = document.getElementById('rrRatioInputs');
+            const customInputs = document.getElementById('customPointsInputs');
 
-            if (mode === 'xauusd') {
-                entryPriceInput.value = '2000.50';
-                pointsInput.value = '50';
+            if (mode === 'rr_ratio') {
+                rrInputs.classList.remove('hidden');
+                customInputs.classList.add('hidden');
             } else {
-                entryPriceInput.value = '1.09250';
-                pointsInput.value = '50';
+                rrInputs.classList.add('hidden');
+                customInputs.classList.remove('hidden');
             }
         }
 
+        function updateDefaultValues() {
+            const mode = document.getElementById('mode').value;
+            const entryPriceInput = document.getElementById('entryPrice');
+            const slPointsInputRR = document.getElementById('points');
+            const slPointsInputCustom = document.getElementById('slPoints');
+            const tpPointsInputCustom = document.getElementById('tpPoints');
+
+            if (mode === 'xauusd') {
+                entryPriceInput.value = '2000.50';
+                slPointsInputRR.value = '50';
+                slPointsInputCustom.value = '50';
+                tpPointsInputCustom.value = '100';
+            } else {
+                entryPriceInput.value = '1.09250';
+                slPointsInputRR.value = '50';
+                slPointsInputCustom.value = '50';
+                tpPointsInputCustom.value = '100';
+            }
+            // Ensure RR Ratio value is 1 for default
+            document.getElementById('rrRatio').value = '1';
+        }
+
         function getPipValue(mode) {
-            return mode === 'xauusd' ? 0.01 : 0.0001; // Gold: 0.01, Forex: 0.0001
+            // Gold (XAU/USD) movement is typically tracked as $0.01 per point
+            return mode === 'xauusd' ? 0.01 : 0.0001; // Forex: 0.0001
         }
 
         function getPairDisplay(mode) {
@@ -787,48 +376,75 @@
             }
             const str = entryPrice.toString();
             if (str.includes('.')) {
-                return Math.min(str.split('.')[1].length, 5);
+                return Math.min(str.split('.')[1].length, 5); // Use up to 5 for Forex
             }
             return 0;
         }
 
         function calculate() {
-            const mode = document.getElementById('mode').value;
+            const assetMode = document.getElementById('mode').value;
+            const calcMode = document.getElementById('calculationMode').value;
             const entryPrice = parseFloat(document.getElementById('entryPrice').value);
-            const points = parseInt(document.getElementById('points').value);
-            currentRatio = parseFloat(document.getElementById('rrRatio').value);
+            
+            let slPoints, tpPoints, rrRatioDisplay;
 
-            if (isNaN(entryPrice) || isNaN(points) || isNaN(currentRatio) || entryPrice <= 0 || points <= 0 || currentRatio <= 0) {
-                alert('กรุณาใส่ราคาเปิด, ระยะ Points/Pips และอัตราส่วน RR ที่ถูกต้อง');
+            if (calcMode === 'rr_ratio') {
+                // RR Ratio Mode
+                slPoints = parseInt(document.getElementById('points').value);
+                const rrRatio = parseFloat(document.getElementById('rrRatio').value);
+                
+                if (isNaN(rrRatio) || rrRatio <= 0) {
+                    alert('กรุณาใส่ Risk/Reward Ratio ที่ถูกต้อง (ต้องมากกว่า 0)');
+                    document.getElementById('results').style.display = 'none';
+                    return;
+                }
+                
+                tpPoints = slPoints * rrRatio;
+                rrRatioDisplay = `1:${rrRatio.toFixed(1)}`;
+            } else {
+                // Custom Points Mode
+                slPoints = parseInt(document.getElementById('slPoints').value);
+                tpPoints = parseInt(document.getElementById('tpPoints').value);
+
+                // Calculate the resulting RR Ratio for display
+                const resultingRR = slPoints > 0 ? (tpPoints / slPoints) : 0;
+                rrRatioDisplay = resultingRR > 0 ? `1:${resultingRR.toFixed(2)}` : 'N/A';
+            }
+
+            if (isNaN(entryPrice) || isNaN(slPoints) || isNaN(tpPoints) || entryPrice <= 0 || slPoints <= 0 || tpPoints <= 0) {
+                alert('กรุณาใส่ราคาเปิด และระยะ Points/Pips ที่ถูกต้อง (ต้องมากกว่า 0)');
                 document.getElementById('results').style.display = 'none';
                 return;
             }
 
-            const pipValue = getPipValue(mode);
-            const pointsValue = points * pipValue;
-            const tpPoints = pointsValue * currentRatio;
-            const slPoints = pointsValue;
-
+            const pipValue = getPipValue(assetMode);
+            const slPointsValue = slPoints * pipValue;
+            const tpPointsValue = tpPoints * pipValue;
+            
             let tp, sl;
 
             if (currentSide === 'buy') {
-                tp = entryPrice + tpPoints;
-                sl = entryPrice - slPoints;
+                tp = entryPrice + tpPointsValue;
+                sl = entryPrice - slPointsValue;
             } else {
-                tp = entryPrice - tpPoints;
-                sl = entryPrice + slPoints;
+                tp = entryPrice - tpPointsValue;
+                sl = entryPrice + slPointsValue;
             }
 
-            const decimalPlaces = getDecimalPlaces(entryPrice, mode);
+            const decimalPlaces = getDecimalPlaces(entryPrice, assetMode);
             const formatDecimals = Math.max(2, decimalPlaces); // At least 2 decimals
 
-            document.getElementById('pairDisplay').textContent = getPairDisplay(mode);
+            document.getElementById('pairDisplay').textContent = getPairDisplay(assetMode);
             document.getElementById('sideDisplay').textContent = currentSide.toUpperCase();
             document.getElementById('sideDisplay').className = `side-indicator ${currentSide}-side`;
             document.getElementById('entryDisplay').textContent = entryPrice.toFixed(formatDecimals);
-            document.getElementById('rrDisplay').textContent = `1:${currentRatio.toFixed(1)}`;
+            document.getElementById('rrDisplay').textContent = rrRatioDisplay;
             document.getElementById('tpDisplay').textContent = tp.toFixed(formatDecimals);
             document.getElementById('slDisplay').textContent = sl.toFixed(formatDecimals);
+
+            // Hide/Show RR Ratio row based on calculation mode
+            document.getElementById('rrRatioResultRow').style.display = (calcMode === 'rr_ratio' || calcMode === 'custom_points') ? 'flex' : 'none';
+
 
             const resultsDiv = document.getElementById('results');
             resultsDiv.style.opacity = '0';
@@ -842,36 +458,43 @@
             }, 100);
         }
 
-        document.getElementById('mode').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('entryPrice').focus();
-            }
+        // Initialize values and display
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default values for XAU/USD (Gold) on load
+            document.getElementById('mode').value = 'xauusd';
+            document.getElementById('rrRatio').value = '1'; // Default RR to 1
+            selectSide('buy');
+            updateDefaultValues(); // Set default prices/points
+            toggleCalculationInputs(); // Ensure correct initial input visibility
+
+            // Accessibility: Focus and Enter key handling
+            document.getElementById('mode').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') document.getElementById('entryPrice').focus();
+            });
+            document.getElementById('entryPrice').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const calcMode = document.getElementById('calculationMode').value;
+                    if (calcMode === 'rr_ratio') {
+                        document.getElementById('points').focus();
+                    } else {
+                        document.getElementById('slPoints').focus();
+                    }
+                }
+            });
+            document.getElementById('points').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') document.getElementById('rrRatio').focus();
+            });
+            document.getElementById('rrRatio').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') calculate();
+            });
+            document.getElementById('slPoints').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') document.getElementById('tpPoints').focus();
+            });
+            document.getElementById('tpPoints').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') calculate();
+            });
         });
 
-        document.getElementById('entryPrice').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('points').focus();
-            }
-        });
-
-        document.getElementById('points').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('rrRatio').focus();
-            }
-        });
-
-        document.getElementById('rrRatio').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                calculate();
-            }
-        });
-
-        // Set default values for XAU/USD (Gold)
-        document.getElementById('mode').value = 'xauusd';
-        document.getElementById('entryPrice').value = '2000.50';
-        document.getElementById('points').value = '50';
-        document.getElementById('rrRatio').value = '1';
-        selectSide('buy');
     </script>
 </body>
 </html>
