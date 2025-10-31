@@ -135,7 +135,7 @@
 
         .calculate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            box-shadow: 8px 25px rgba(59, 130, 246, 0.4);
         }
 
         .results {
@@ -256,7 +256,7 @@
             <select id="mode" onchange="updateDefaultValues()">
                 <option value="xauusd">XAU/USD (Gold)</option>
                 <option value="forex">Forex (เช่น EUR/USD)</option>
-            </select>
+                <option value="btcusd">BTC/USD (Bitcoin)</option> </select>
         </div>
 
         <div class="form-group">
@@ -354,6 +354,12 @@
                 pointsInput.value = '50';
                 tpPointsInput.value = '100';
                 slPointsInput.value = '50';
+            } else if (mode === 'btcusd') {
+                // ค่าเริ่มต้นสำหรับ BTC/USD (ตัวอย่าง: ราคา 60000, 1000 points = 10 ดอลลาร์)
+                entryPriceInput.value = '60000.00';
+                pointsInput.value = '1000'; // 1000 points
+                tpPointsInput.value = '2000';
+                slPointsInput.value = '1000';
             } else {
                 entryPriceInput.value = '1.09250';
                 pointsInput.value = '50';
@@ -377,16 +383,28 @@
         }
 
         function getPipValue(mode) {
-            return mode === 'xauusd' ? 0.01 : 0.0001; // Gold: 0.01, Forex: 0.0001
+            if (mode === 'xauusd') {
+                return 0.01; // Gold: 0.01
+            } else if (mode === 'btcusd') {
+                return 0.01; // BTC/USD: 1 point = 0.01 USD (100 points = 1 USD, 10000 points = 100 USD)
+            } else {
+                return 0.0001; // Forex: 0.0001
+            }
         }
 
         function getPairDisplay(mode) {
-            return mode === 'xauusd' ? 'XAU/USD' : 'Forex';
+            if (mode === 'xauusd') {
+                return 'XAU/USD';
+            } else if (mode === 'btcusd') {
+                return 'BTC/USD';
+            } else {
+                return 'Forex';
+            }
         }
 
         function getDecimalPlaces(entryPrice, mode) {
-            if (mode === 'xauusd') {
-                return 2; // Gold typically uses 2 decimals
+            if (mode === 'xauusd' || mode === 'btcusd') {
+                return 2; // Gold & BTC/USD มักใช้ 2 ตำแหน่งทศนิยม
             }
             const str = entryPrice.toString();
             if (str.includes('.')) {
