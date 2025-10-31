@@ -119,6 +119,9 @@
             margin-bottom: 20px;
         }
 
+        /* ****************************************************** */
+        /* CSS ที่ปรับปรุงใหม่สำหรับปุ่มคำนวณ (ลดเงา) */
+        /* ****************************************************** */
         .calculate-btn {
             width: 100%;
             padding: 16px;
@@ -130,13 +133,16 @@
             font-weight: 700;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+            /* ปรับเงาให้บางลง: ลดการกระจาย (Blur) และความทึบ (Opacity) */
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2); /* เดิม 0 6px 20px rgba(..., 0.3) */
         }
 
         .calculate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 8px 25px rgba(59, 130, 246, 0.4);
+            /* ปรับเงาเมื่อ Hover ให้บางลงเล็กน้อย */
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.3); /* เดิม 0 8px 25px rgba(..., 0.4) */
         }
+        /* ****************************************************** */
 
         .results {
             margin-top: 24px;
@@ -256,7 +262,8 @@
             <select id="mode" onchange="updateDefaultValues()">
                 <option value="xauusd">XAU/USD (Gold)</option>
                 <option value="forex">Forex (เช่น EUR/USD)</option>
-                <option value="btcusd">BTC/USD (Bitcoin)</option> </select>
+                <option value="btcusd">BTC/USD (Bitcoin)</option>
+            </select>
         </div>
 
         <div class="form-group">
@@ -355,9 +362,8 @@
                 tpPointsInput.value = '100';
                 slPointsInput.value = '50';
             } else if (mode === 'btcusd') {
-                // ค่าเริ่มต้นสำหรับ BTC/USD (ตัวอย่าง: ราคา 60000, 1000 points = 10 ดอลลาร์)
                 entryPriceInput.value = '60000.00';
-                pointsInput.value = '1000'; // 1000 points
+                pointsInput.value = '1000';
                 tpPointsInput.value = '2000';
                 slPointsInput.value = '1000';
             } else {
@@ -386,7 +392,7 @@
             if (mode === 'xauusd') {
                 return 0.01; // Gold: 0.01
             } else if (mode === 'btcusd') {
-                return 0.01; // BTC/USD: 1 point = 0.01 USD (100 points = 1 USD, 10000 points = 100 USD)
+                return 0.01; // BTC/USD: 1 point = 0.01 USD
             } else {
                 return 0.0001; // Forex: 0.0001
             }
@@ -404,7 +410,7 @@
 
         function getDecimalPlaces(entryPrice, mode) {
             if (mode === 'xauusd' || mode === 'btcusd') {
-                return 2; // Gold & BTC/USD มักใช้ 2 ตำแหน่งทศนิยม
+                return 2;
             }
             const str = entryPrice.toString();
             if (str.includes('.')) {
